@@ -1,12 +1,7 @@
-import sys
-from PIL import Image
-
 from django.db import models
 from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
-from django.core.files.uploadedfile import InMemoryUploadedFile
-from io import BytesIO
 from django.urls import reverse
 from django.utils import timezone
 
@@ -20,14 +15,6 @@ def get_models_for_count(*model_names):
 def get_product_urls(obj, viewname):
     ct_model = obj.__class__._meta.model_name
     return reverse(viewname, kwargs={'ct_model': ct_model, 'slug': obj.slug})
-
-
-class MinResolutionErrorException(Exception):
-    pass
-
-
-class MaxResolutionErrorException(Exception):
-    pass
 
 
 '''
@@ -87,17 +74,11 @@ class Category(models.Model):
     slug = models.SlugField(unique=True)
     objects = CategoryManager()
 
-    def get_absolute_url(self):
-        return reverse('category_detail', kwargs={'slug': self.slug})
-
     def __str__(self):
         return self.name
 
 
 class Product(models.Model):
-    MIN_RESOLUTION = (400, 400)
-    MAX_RESOLUTION = (800, 800)
-    MAX_IMAGE_SIZE = 3145728  # 3Mb
 
     class Meta:
         abstract = True
@@ -115,29 +96,6 @@ class Product(models.Model):
     def get_model_name(self):
         return self.__class__.__name__.lower()
 
-    def save(self, *args, **kwargs):
-        image = self.image
-        img = Image.open(image)
-        min_height, min_width = Product.MIN_RESOLUTION
-        max_height, max_width = Product.MIN_RESOLUTION
-        if img.height < min_height or img.weihgt < min_width:
-            raise MinResolutionErrorException('Rozmiar zdjecia mniejszy za minimalne')
-        if img.height > max_height or img.weihgt > max_width:
-            raise MaxResolutionErrorException('Rozmiar zdjecia wiekszy za maksymalne')
-        super().save(*args, **kwargs)
-        # Jesli zachcemy pokroic rysunek w locie -->
-        #
-        # image = self.image
-        # img = Image.open(image)
-        # new_img = img.convert('RGB')
-        # resized_new_img = new_img.resize((800, 800), Image.ANTIALIAS)
-        # filestream = BytesIO()
-        # file_ = resized_new_img.save(filestream, 'JPEG', quality=90)
-        # file_.seek(0)
-        # name = '{}.{}'.format(*self.image.name.split('.'))
-        # self.image = InMemoryUploadedFile(
-        #    file_, 'ImageField', name, 'jpeg/image', sys.getsizeof(file_), None)
-
 
 class Notebook(Product):
     diagonal = models.CharField(max_length=255, verbose_name='Cale')
@@ -152,9 +110,6 @@ class Notebook(Product):
 
     def get_absolute_url(self):
         return get_product_urls(self, 'product_detail')
-
-    def get_model_name(self):
-        return self.__class__._meta.model_name
 
 
 class Smartphone(Product):
@@ -175,9 +130,6 @@ class Smartphone(Product):
 
     def get_absolute_url(self):
         return get_product_urls(self, 'product_detail')
-
-    def get_model_name(self):
-        return self.__class__._meta.model_name
 
 
 class CartProduct(models.Model):
