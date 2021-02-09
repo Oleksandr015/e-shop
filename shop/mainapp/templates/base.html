@@ -34,7 +34,7 @@
       <div class="collapse navbar-collapse" id="navbarResponsive">
         <ul class="navbar-nav ml-auto">
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'cart' %}">Корзина <span class="badge badge-pill badge-danger">0</span></a>
+            <a class="nav-link" href="{% url 'cart' %}">Koszyk <span class="badge badge-pill badge-danger">{{ cart.products.count }}</span></a>
           </li>
         </ul>
       </div>
