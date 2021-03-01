@@ -94,6 +94,7 @@ class DeleteFromCartView(CartMixin, View):
 
 
 class ChangeQTYView(CartMixin, View):
+
     def post(self, request, *args, **kwargs):
         ct_model, product_slug = kwargs.get('ct_model'), kwargs.get('slug')
         content_type = ContentType.objects.get(model=ct_model)
@@ -105,7 +106,7 @@ class ChangeQTYView(CartMixin, View):
         cart_product.qty = qty
         cart_product.save()
         recalc_cart(self.cart)
-        messages.add_message(request, messages.INFO, "Ilosz towaru zostala zmieniona")
+        messages.add_message(request, messages.INFO, "Кол-во успешно изменено")
         return HttpResponseRedirect('/cart/')
 
 

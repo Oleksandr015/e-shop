@@ -33,15 +33,15 @@
       <td>
         <form action="{% url 'change_qty' ct_model=item.content_object.get_model_name slug=item.content_object.slug %}" method="POST">
           {% csrf_token %}
-          <input type="number" class="'form-control" name="qty" style="width: 70px;" min="1" value="{{ item.qti }}">
+          <input type="number" class="'form-control" name="qty" style="width: 50px;" min="1" value="{{ item.qty }}">
           <br>
           <input type="submit" class="btn btn-primary" value="Zmienic ilosc">
         </form>
       </td>
-      <td>{{item.final_price }} zl</td>
+      <td>{{ item.final_price }} zl</td>
       <td>
         <a href="{% url 'delete_from_cart' ct_model=item.content_object.get_model_name slug=item.content_object.slug %}">
-          <button class="btn btn -danger">Usunac z koszuka</a>
+          <button class="btn btn -danger">Usunac z koszyka</button></a>
       </td>
     </tr>
   {% endfor %}
@@ -49,7 +49,7 @@
     <td colspan="2"></td>
     <td>Razem:</td>
     <td>{{ cart.total_products }}</td>
-    <td><strong> {{ cart.final_price }} zl </strong></td>
+    <td><strong> {{ cart.final_price }} zl</strong></td>
     <td><a href="{% url 'checkout' %}"><button class="btn btn-primary">Podsumowanie</button></a></td>
   </tr>
   </tbody>
