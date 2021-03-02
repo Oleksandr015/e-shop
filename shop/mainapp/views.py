@@ -11,6 +11,7 @@ from .models import Notebook, Smartphone, Category, LatestProducts, Customer, Ca
 from .utils import recalc_cart
 
 
+
 class BaseView(CartMixin, View):
 
     def get(self, request, *args, **kwargs):
@@ -159,4 +160,3 @@ class MakeOrderView(CartView, View):
             messages.add_message(request, messages.INFO, 'Dziekuemy za wasz wybor!')
             return HttpResponseRedirect('/')
         return HttpResponseRedirect('/checkout/')
-

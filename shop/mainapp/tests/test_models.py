@@ -22,7 +22,7 @@ class CategoryModelTest(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-        Category.objects.create(name='TV', slug='tv')
+        Category.objects.create(name='Notebook', slug='notebook')
 
     def test_name_label(self):
         new_category = Category.objects.get(id=1)
@@ -41,7 +41,7 @@ class CategoryModelTest(TestCase):
 
     def test_get_absolute_url(self):
         category = Category.objects.get(id=1)
-        self.assertEquals(category.get_absolute_url(), '/category/tv/')
+        self.assertEquals(category.get_absolute_url(), '/category/notebook/')
 
 
 class NotebookModelTest(TestCase):

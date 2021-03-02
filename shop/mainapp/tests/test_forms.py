@@ -2,7 +2,7 @@ from django.test import TestCase
 
 import datetime
 
-from shop.mainapp.forms import OrderForm
+from mainapp.forms import OrderForm
 
 
 class OrderFormTest(TestCase):
