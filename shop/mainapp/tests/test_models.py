@@ -368,10 +368,5 @@ class CartModelTest(TestCase):
 
     def test_customer_output(self):
         new_customer = Customer.objects.get(id=1)
-        expected_cp_output = 'Konsument: %s %s' % (new_customer.user.first_name, new_customer.user.last_name )
+        expected_cp_output = 'Konsument: %s %s' % (new_customer.user.first_name, new_customer.user.last_name)
         self.assertEqual(expected_cp_output, str(new_customer))
-
-
-
-
-
