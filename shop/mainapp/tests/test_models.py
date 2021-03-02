@@ -326,9 +326,9 @@ class CartModelTest(TestCase):
         field_label = name._meta.get_field('owner').verbose_name
         self.assertEqual(field_label, 'Klient')
 
-    def test_name_main_user(self):
+    def test_name_main_user_customer(self):
         name = Customer.objects.get(id=1)
-        field_label = name._meta.get_field('owner').verbose_name
+        field_label = name._meta.get_field('user').verbose_name
         self.assertEqual(field_label, 'Konsument')
 
     def test_name_main_phone(self):
@@ -355,6 +355,23 @@ class CartModelTest(TestCase):
         product = Customer.objects.get(id=1)
         max_length = product._meta.get_field('address').max_length
         self.assertEquals(max_length, 255)
+
+    def test_cart_product_output(self):
+        new_cp = CartProduct.objects.get(id=1)
+        expected_cp_output = 'Produkt: %s (w koszyku)' % (new_cp.content_object.title)
+        self.assertEqual(expected_cp_output, str(new_cp))
+
+    def test_cart_output(self):
+        new_cart = Cart.objects.get(id=1)
+        expected_cp_output = new_cart.id
+        self.assertEqual(expected_cp_output, int(str(new_cart)))
+
+    def test_customer_output(self):
+        new_customer = Customer.objects.get(id=1)
+        expected_cp_output = 'Konsument: %s %s' % (new_customer.user.first_name, new_customer.user.last_name )
+        self.assertEqual(expected_cp_output, str(new_customer))
+
+
 
 
 
