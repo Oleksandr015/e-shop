@@ -50,10 +50,6 @@
 
         <h1 class="my-4">Basket-Shop</h1>
         <div class="list-group">
-          {% for category in categories %}
-          <a href="{{ category.url }}" class="list-group-item">{{ category.name }} ({{ category.count }})</a>
-          {% endfor %}
-
         </div>
 
       </div>
@@ -63,15 +59,15 @@
         {% block content %}
         {% if messages %}
             {% for message in messages %}
-            <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
-                   <strong>{{ message }}</strong>
-                   <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                     <span aria-hidden="true">&times;</span>
-                   </button>
-                 </div>
+              <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
+                <strong>{{ message }}</strong>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
             {% endfor %}
         {% endif %}
-         <div id="carouselExampleIndicators" class="carousel slide my-4" data-ride="carousel">
+        <div id="carouselExampleIndicators" class="carousel slide my-4" data-ride="carousel">
           <ol class="carousel-indicators">
             <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
             <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
@@ -98,7 +94,6 @@
           </a>
         </div>
 
-
         <div class="row">
           {% for product in products %}
           <div class="col-lg-4 col-md-6 mb-4">
@@ -108,9 +103,9 @@
                 <h4 class="card-title">
                   <a href="{{ product.get_absolute_url }}">{{ product.title }}</a>
                 </h4>
-                <h5>{{ product.price }} zl</h5>
-                <a href="{% url 'add_to_cart' ct_model=product.get_model_name slug=product.slug %}">
-                <button class="btn btn-danger">W koszyk</button>
+                <h5>{{ product.price }} zl.</h5>
+                <a href="{% url 'add_to_cart' slug=product.slug %}">
+                  <button class="btn btn-danger">Dodać do koszyka</button>
                 </a>
               </div>
             </div>
@@ -119,6 +114,7 @@
         </div>
         <!-- /.row -->
       {% endblock content %}
+
       </div>
       <!-- /.col-lg-9 -->
 
