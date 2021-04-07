@@ -31,7 +31,9 @@ In Views, some functions have been designed to mark the presence of an SD card f
 
 ****Clone this repository****
 
-   `git clone git@github.com:Oleksandr015/e-shop.git`
+   `git clone git@github.com:Oleksandr015/e-shop.git` or
+   `git clone https://github.com/Oleksandr015/e-shop.git`
+   
    
 
 ****Install requirements****
