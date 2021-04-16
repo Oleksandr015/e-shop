@@ -8,7 +8,7 @@ from django.contrib import messages
 
 from .forms import OrderForm, LoginForm, RegistrationForm
 from .mixins import CartMixin
-from .models import Category, Customer, CartProduct, Product
+from .models import Category, Customer, CartProduct, Product, Order
 from .utils import recalc_cart
 
 
@@ -213,3 +213,16 @@ class RegistrationView(CartMixin, View):
             'cart': self.cart
         }
         return render(request, 'registration.html', context)
+
+
+class ProFileView(CartMixin, View):
+
+    def get(self, request, *args, **kwargs):
+        customer = Customer.objects.get(user=request.user)
+        orders = Order.objects.filter(customer=customer).order_by('-created_at')
+        categories = Category.objects.all()
+        return render(
+            request,
+            'profile.html',
+            {'orders': orders, 'cart': self.cart, 'categories': categories}
+        )

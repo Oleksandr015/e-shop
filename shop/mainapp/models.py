@@ -25,6 +25,12 @@ class Category(models.Model):
     def get_absolute_url(self):
         return reverse('category_detail', kwargs={'slug': self.slug})
 
+    def get_fields_for_filter_in_template(self):
+        return ProductFeatures.objects.filter(
+            category=self,
+            use_in_filter=True
+        ).prefetch_related('category').value('feature_key', 'feature_measure', 'feature_name', 'filter_type')
+
 
 class Product(models.Model):
 
@@ -43,6 +49,63 @@ class Product(models.Model):
 
     def get_absolute_url(self):
         return reverse('product_detail', kwargs={'slug': self.slug})
+
+
+class ProductFeatures(models.Model):
+
+    RADIO = 'radio'
+    CHECKBOX = 'checkbox'
+
+    FILTER_TYPE_CHOISES = (
+        (RADIO, 'Radiobutton'),
+        (CHECKBOX, 'Czekboks')
+    )
+    feature_key = models.CharField(max_length=100, verbose_name='Cechy charakterystyczne')
+    feature_name = models.CharField(max_length=255, verbose_name='Imię charakterystyczne')
+    category = models.ForeignKey(Category, verbose_name='Kategoria', on_delete=models.CASCADE)
+    postfix_for_value = models.CharField(
+        max_length=20,
+        null=True,
+        blank=True,
+        verbose_name='Przyrostek',
+        help_text=f'Na przykład możesz dla "Godziny pracy" dodać przyrostek godzin - "10 godzin".'
+    )
+    use_in_filter = models.BooleanField(
+        default=False,
+        verbose_name='Służy do filtrowania produktów w szablonie'
+    )
+    filter_type = models.CharField(
+        max_length=20,
+        verbose_name='Typ filtra',
+        default=CHECKBOX,
+        choices=FILTER_TYPE_CHOISES
+    )
+    filter_measure = models.CharField(
+        max_length=50,
+        verbose_name='Służy do filtrowania produktów w szablonie',
+        help_text='Jednostka miary dla konkretnego filtra, na przykład - częstotliwość procesora (Ghz).'
+    )
+
+    def __str__(self):
+        return f'Kategoria - "{self.category.name}" | Charakterystyka - "{self.feature_name}"'
+
+
+class ProductFeatureValidators(models.Model):
+
+    category = models.ForeignKey(Category, verbose_name='Kategory', on_delete=models.CASCADE)
+    feature = models.ForeignKey(
+        ProductFeatures, verbose_name='Charakterystyka', null=True, blank=True, on_delete=models.CASCADE
+    )
+    feature_value = models.CharField(
+        max_length=255, unique=True, null=True, blank=True, verbose_name='Wartość сharakterystyky'
+    )
+
+    def __str__(self):
+        if not self.feature:
+            return f'Nie wybrano cech walidatora kategorii"{self.category.name}"'
+        return f'Walidator kategorii "{self.category.name}"| ' \
+               f'Charakterystyka - "{self.feature.feature_name}" | ' \
+               f'Wartość - "{self.feature_value}"'
 
 
 class CartProduct(models.Model):

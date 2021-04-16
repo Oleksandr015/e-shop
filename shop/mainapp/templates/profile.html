@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+<h3 class="mt-3 mb-3">Zamowienia użytkownika {{ request.user.username }}</h3>
+{% if not orders.count %}
+<div class="col-md-12" style="margin-top: 300px; margin-bottom: 300px;">
+    <h3>W tej chwili nie ma żdnego zamówienia.<a href="{% url 'base' %}">Zrób zakupy</a></h3>
+</div>
+{% else %}
+<div class="col-md-12" style="margin-bottom: 250px; margin-top: 250px">
+
+<table class="table">
+    <thead>
+        <th scope="col">Numer</th>
+        <th scope="col">Status</th>
+        <th scope="col">Suma</th>
+        <th scope="col">Towar</th>
+        <th scope="col">Dodatkovo</th>
+    </thead>
+    <tbody>
+    {% for order in orders %}
+        <tr>
+            <th scope="row">{{ order.id }}</th>
+            <td> {{ order.status }}</td>
+            <td> {{ order.cart.final_price }} zł</td>
+            <td>
+                <ul>
+                    {% for item in order.cart.products.all %}
+                        <li>{{ item.product.title }} x {{ item.qty }}</li>
+                    {% endfor %}
+                </ul>
+            </td>
+            <td>
+                <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#exampleModal-{{ order.id }}">Dodatkowo</button>
+                    <div class="modal fade" id="exampleModal-{{ order.id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                  <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Info o zamóweniu</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                        <h4 class="text-center">Towar</h4>
+                          <table class="table">
+                              <thead>
+                              <tr>
+                                  <th scope="col">Nazwa</th>
+                                  <th scope="col">Foto</th>
+                                  <th scope="col">Cena</th>
+                                  <th scope="col">Ilość</th>
+                                  <th scope="col">Razem</th>
+                              </tr>
+                              </thead>
+                              <tbody>
+                                {% for item in order.cart.products.all %}
+                                  <tr>
+                                      <th scope="row">{{ item.product.title }}</th>
+                                      <td class="w-25"><img scr="{{ item.product.image.url }}" class="img-fluid"></td>
+                                      <td><strong>{{ item.product.price }}</strong>zł</td>
+                                      <td>{{ item.qty }}</td>
+                                      <td>{{ item.final_price }}zł</td>
+                                  </tr>
+                                {% endfor %}
+                              <tr>
+                                  <td colspan="2"></td>
+                                  <td>Razem:</td>
+                                  <td>{{ order.cart.total_products}}</td>
+                                  <td><strong>{{ order.cart.final_price}}</strong>zł</td>
+                              </tr>
+                              </tbody>
+                          </table>
+                          <hr>
+                          <h4 class="text-center">Dodatkowa informacja</h4>
+                          <p>Imię: <strong>{{ order.first_name }}</strong></p>
+                          <p>Nazwiśko: <strong>{{ order.last_name }}</strong></p>
+                          <p>Telefon: <strong>{{ order.phone }}</strong></p>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zamknąć</button>
+                        <button type="button" class="btn btn-primary">Zapisać zmiany</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+</div>
+{% endif %}
+{% endblock %}
