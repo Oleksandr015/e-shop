@@ -2,9 +2,9 @@ from django.db import models
 
 
 class CategoryFeature(models.Model):
-    '''
+    """
     Charakterystyka określonej kategorii
-    '''
+    """
     category = models.ForeignKey('mainapp.Category', verbose_name='Categoria', on_delete=models.CASCADE)
     feature_name = models.CharField(max_length=100, verbose_name='Nazwa charakterystyki')
     feature_filter_name = models.CharField(max_length=50, verbose_name='Nazwa filtra')
@@ -18,9 +18,9 @@ class CategoryFeature(models.Model):
 
 
 class FeatureValidator(models.Model):
-    '''
+    """
     Walidator wartości charakterystycznych należący do określonej kategorii.
-    '''
+    """
     category = models.ForeignKey('mainapp.Category', verbose_name='Kategoria', on_delete=models.CASCADE)
     feature_key = models.ForeignKey(CategoryFeature, verbose_name='Klucz charakterystyki', on_delete=models.CASCADE)
     valid_feature_value = models.CharField(max_length=100, verbose_name='Ważna wartość')
@@ -32,9 +32,9 @@ class FeatureValidator(models.Model):
 
 
 class ProductFeatures(models.Model):
-    '''
+    """
     Szczegóły produktu.
-    '''
+    """
 
     product = models.ForeignKey('mainapp.Product', verbose_name='Product', on_delete=models.CASCADE)
     feature = models.ForeignKey(CategoryFeature, verbose_name='Charakterystyka', on_delete=models.CASCADE)

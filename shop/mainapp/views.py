@@ -88,7 +88,7 @@ class ChangeQTYView(CartMixin, View):
         cart_product.qty = qty
         cart_product.save()
         recalc_cart(self.cart)
-        messages.add_message(request, messages.INFO, "Кол-во успешно изменено")
+        messages.add_message(request, messages.INFO, "Ilość zmieniona pomyślnie")
         return HttpResponseRedirect('/cart/')
 
 
