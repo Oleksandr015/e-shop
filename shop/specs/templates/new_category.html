@@ -4,7 +4,7 @@
 
 
     <div class="col-md-12">
-        <form action="{% 'new-category' %}" method="POST">
+        <form action="{% url 'new-category' %}" method="POST">
             {% csrf_token %}
             {{ form|crispy }}
             <br>

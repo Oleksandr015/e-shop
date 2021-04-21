@@ -1,0 +1,9 @@
+{% extends 'product_features.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <form action="{% url 'new-feature' %}" method="POST">
+        {{ form|crispy }}
+    <br>
+    <input type="submit" class="btn btn-success" value="Stworżyć nową charakterystykę">
+    </form>
+{% endblock content %}
